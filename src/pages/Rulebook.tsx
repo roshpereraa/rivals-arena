@@ -85,7 +85,8 @@ export function Rulebook() {
         <span className="art-no display">VI</span>
         <div>
           <h2 className="display">Below the belt</h2>
-          <p><b>This is a paper arena.</b> Every fighter, trade, price and purse is simulated in your browser with practice ETH. Your purse starts at {START_PURSE} ETH and is saved on this device only. Nothing touches a blockchain, and no real wallet can connect.</p>
+          <p><b>This is a paper arena.</b> Every fighter, trade, price and purse is simulated in your browser with practice ETH. Your purse starts at {START_PURSE} ETH and is saved on this device only. Bouts never touch a blockchain.</p>
+          <p><b>Wallets are real, trades are not.</b> You can connect MetaMask, Rabby, Coinbase Wallet, Phantom and other EVM wallets. The site reads your address, network and Robinhood Chain balance. It never asks you to sign a message or send a transaction.</p>
           <p><b>The crowd is simulated too.</b> The other traders are bots with momentum, comebacks and the odd whale. They’re built to feel like a real launch, not to predict one.</p>
           <p><b>Real launches are harsher.</b> Newly launched tokens mostly go to zero. Head starts, coordinated buyers and snipers can decide a real fight before it begins. Use this arena to learn the mechanics, not to size real bets. Nothing here is investment advice.</p>
         </div>

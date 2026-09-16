@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { ago, enterArena, fmtEth, netWorth, START_PURSE } from '../sim/engine';
+import { ago, fmtEth, netWorth, START_PURSE } from '../sim/engine';
+import { WalletButton } from './WalletUI';
 import { useArena } from '../lib/hooks';
 
 const NAV: { path: string; label: string; short?: string }[] = [
@@ -27,7 +28,7 @@ export function Logo() {
   );
 }
 
-export function Header({ route, onEnter }: { route: string; onEnter: () => void }) {
+export function Header({ route, onEnter }: { route: string; onEnter: (tab?: 'evm' | 'sol') => void }) {
   const s = useArena();
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
@@ -55,19 +56,16 @@ export function Header({ route, onEnter }: { route: string; onEnter: () => void 
           <span className="chip chip--paper mono" title="Every trade here uses practice ETH">
             <i /> Paper arena
           </span>
-          {s.purse.entered ? (
-            <a href="#/corner" className="purse-chip mono">
+          {s.purse.entered && (
+            <a href="#/corner" className="purse-chip mono" title="Practice purse">
               <span>{fmtEth(s.purse.eth, 2)}</span>
               <b className={pnl >= 0 ? 'up' : 'down'}>
                 {pnl >= 0 ? '+' : ''}
                 {pnl.toFixed(2)}
               </b>
             </a>
-          ) : (
-            <button className="btn btn--bell" onClick={onEnter}>
-              Enter the arena
-            </button>
           )}
+          <WalletButton onOpen={onEnter} />
         </div>
       </header>
       <nav className="tabbar" aria-label="Primary mobile">
@@ -102,81 +100,13 @@ export function FeedStrip() {
   );
 }
 
-export function EnterModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [picked, setPicked] = useState<string | null>(null);
-  useEffect(() => {
-    if (!open) return;
-    const on = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
-    window.addEventListener('keydown', on);
-    return () => window.removeEventListener('keydown', on);
-  }, [open, onClose]);
-  useEffect(() => setPicked(null), [open]);
-  if (!open) return null;
-
-  const wallets = ['MetaMask', 'Rabby', 'Coinbase Wallet', 'Browser wallet'];
-
-  return (
-    <div className="modal" role="dialog" aria-modal="true" aria-labelledby="enter-title" onClick={onClose}>
-      <div className="modal__card" onClick={(e) => e.stopPropagation()}>
-        <button className="modal__x" onClick={onClose} aria-label="Close">×</button>
-        <div className="modal__left">
-          <p className="eyebrow">Weigh-in</p>
-          <h2 id="enter-title" className="display">Step into the ring</h2>
-          <button
-            className="purse-option"
-            onClick={() => {
-              enterArena();
-              onClose();
-            }}
-          >
-            <span className="purse-option__badge">Recommended</span>
-            <strong>Practice purse</strong>
-            <span>{START_PURSE} ETH of practice money. Back corners, launch coins, learn the fight. No wallet, no risk.</span>
-          </button>
-          <p className="eyebrow eyebrow--dim">Real wallets</p>
-          <ul className="wallets">
-            {wallets.map((w) => (
-              <li key={w}>
-                <button onClick={() => setPicked(w)} className={picked === w ? 'is-picked' : ''}>
-                  {w}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="modal__right">
-          {picked ? (
-            <>
-              <h3>{picked} isn’t on the card yet</h3>
-              <p>
-                RIVALS is running as a paper arena. The fight contracts aren’t deployed, so there’s nothing for a real wallet to sign.
-                Take the practice purse and learn how bouts play out first.
-              </p>
-            </>
-          ) : (
-            <>
-              <h3>How the arena works</h3>
-              <ol className="mini-rules">
-                <li><b>Every coin launches against a rival.</b> Two curves, one clock.</li>
-                <li><b>Buys pull the rope.</b> Fill your curve first and it’s a KO.</li>
-                <li><b>No KO?</b> The bigger corner at the bell wins on decision.</li>
-                <li><b>Losers get absorbed.</b> Their holders swap into the winner at 70%.</li>
-              </ol>
-            </>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export function Footer() {
   return (
     <footer className="footer">
       <div className="footer__top">
         <div>
           <Logo />
-          <p>Every coin is born in a fight. A paper-trading launchpad arena built around Robinhood Chain culture.</p>
+          <p>Every coin is born in a fight. A paper-trading launchpad arena built around Robinhood Chain culture. Connect any wallet; bouts are settled with practice ETH.</p>
         </div>
         <div>
           <h4>Fight</h4>
@@ -199,7 +129,7 @@ export function Footer() {
       </div>
       <div className="footer__bottom mono">
         <span>© 2026 RIVALS · paper arena</span>
-        <span>All prices, trades and fighters are simulated with practice ETH. Nothing here is real money or investment advice.</span>
+        <span>All prices, trades and fighters are simulated with practice ETH. Connected wallets are never asked to sign or send. Nothing here is investment advice.</span>
       </div>
     </footer>
   );
