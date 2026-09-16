@@ -7,6 +7,7 @@ import { CallOut } from './pages/CallOut';
 import { Belt } from './pages/Belt';
 import { Corner } from './pages/Corner';
 import { Rulebook } from './pages/Rulebook';
+import { Lab } from './pages/Lab';
 
 export function App() {
   const route = useRoute();
@@ -20,6 +21,7 @@ export function App() {
   else if (route === '/belt') page = <Belt onEnter={onEnter} />;
   else if (route === '/corner') page = <Corner onEnter={onEnter} />;
   else if (route === '/rulebook') page = <Rulebook />;
+  else if (route === '/lab') page = <Lab />;
   else page = <Arena onEnter={onEnter} />;
 
   return (

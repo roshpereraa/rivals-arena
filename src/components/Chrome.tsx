@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import { ago, enterArena, fmtEth, netWorth, START_PURSE } from '../sim/engine';
 import { useArena } from '../lib/hooks';
 
-const NAV = [
+const NAV: { path: string; label: string; short?: string }[] = [
   { path: '/', label: 'Arena' },
   { path: '/call-out', label: 'Call out' },
   { path: '/belt', label: 'The Belt' },
+  { path: '/lab', label: 'Token Lab', short: 'Lab' },
   { path: '/corner', label: 'Corner' },
   { path: '/rulebook', label: 'Rulebook' },
 ];
@@ -72,7 +73,7 @@ export function Header({ route, onEnter }: { route: string; onEnter: () => void 
       <nav className="tabbar" aria-label="Primary mobile">
         {NAV.map((n) => (
           <a key={n.path} href={`#${n.path}`} className={isActive(route, n.path) ? 'is-active' : ''}>
-            {n.label}
+            {n.short ?? n.label}
           </a>
         ))}
       </nav>
@@ -182,6 +183,7 @@ export function Footer() {
           <a href="#/">Live bouts</a>
           <a href="#/call-out">Call someone out</a>
           <a href="#/belt">The Belt</a>
+          <a href="#/lab">Token Lab</a>
         </div>
         <div>
           <h4>You</h4>
